@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid animate-up">
+    <!-- Profile Header Banner -->
+    <div class="dashboard-card border-0 mb-5 p-0 overflow-hidden" style="min-height: 200px; position: relative;">
+        <div style="height: 120px; background: var(--primary-gradient); opacity: 0.8;"></div>
+        <div class="px-5 pb-4" style="margin-top: -60px;">
+            <div class="d-flex align-items-end gap-4">
+                <div class="rounded-circle border border-4 border-dark bg-primary d-flex align-items-center justify-content-center shadow-lg" style="width: 120px; height: 120px; font-size: 50px; color: white;">
+                    {{ current_user.username[0].upper() }}
+                </div>
+                <div class="mb-2">
+                    <h1 class="fw-bold mb-0">{{ current_user.username }}</h1>
+                    <p class="text-muted mb-0"><i class="bi bi-envelope me-2"></i>{{ current_user.email }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Account Info -->
+        <div class="col-lg-8">
+            <div class="dashboard-card mb-4">
+                <h5 class="fw-bold mb-4">Account Information</h5>
+                <form class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" value="{{ current_user.username }}" readonly>
+                            <label>Username</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" value="{{ current_user.email }}" readonly>
+                            <label>Email Address</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" value="{{ current_user.created_at.strftime('%Y-%m-%d') }}" readonly>
+                            <label>Joined On</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" disabled>
+                                <option selected>English (US)</option>
+                            </select>
+                            <label>Preferred Language</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Performance Stats (Quick View) -->
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="dashboard-card text-center py-4" style="background: rgba(0, 132, 255, 0.05);">
+                        <i class="bi bi-award text-primary fs-2 mb-2"></i>
+                        <h6 class="text-muted small uppercase">Reliability</h6>
+                        <h4 class="fw-bold mb-0">High</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dashboard-card text-center py-4" style="background: rgba(0, 210, 255, 0.05);">
+                        <i class="bi bi-speedometer2 text-info fs-2 mb-2"></i>
+                        <h6 class="text-muted small uppercase">Avg. Speed</h6>
+                        <h4 class="fw-bold mb-0">2.4 Days</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dashboard-card text-center py-4" style="background: rgba(25, 135, 84, 0.05);">
+                        <i class="bi bi-shield-check text-success fs-2 mb-2"></i>
+                        <h6 class="text-muted small uppercase">Security</h6>
+                        <h4 class="fw-bold mb-0">Active</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Actions -->
+        <div class="col-lg-4">
+            <div class="dashboard-card mb-4">
+                <h5 class="fw-bold mb-4">Account Security</h5>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-outline-secondary text-start p-3 border-secondary border-opacity-25 w-100">
+                        <i class="bi bi-key me-2"></i> Change Password
+                    </button>
+                    <button class="btn btn-outline-secondary text-start p-3 border-secondary border-opacity-25 w-100">
+                        <i class="bi bi-shield-lock me-2"></i> Two-Factor Auth
+                    </button>
+                    <hr class="border-secondary border-opacity-25">
+                    <button class="btn btn-outline-danger text-start p-3 border-danger border-opacity-25 w-100">
+                        <i class="bi bi-trash me-2"></i> Delete Account
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h5 class="fw-bold mb-3">System Preferences</h5>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                    <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="realTimeUpdates" checked>
+                    <label class="form-check-label" for="realTimeUpdates">WebSocket Sync</label>
+                </div>
+                <button class="btn btn-primary w-100 mt-2">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

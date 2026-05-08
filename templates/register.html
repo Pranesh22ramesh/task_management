@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="dashboard-card p-5 shadow-lg animate-fade" style="width: 100%; max-width: 450px;">
+        <h2 class="fw-bold mb-4 text-center">Register</h2>
+        <form id="registerFormAction" class="needs-validation" novalidate>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="username" id="regUsername" placeholder="Username" required minlength="3">
+                <label for="regUsername">Username</label>
+                <div class="invalid-feedback">Please choose a username (min 3 chars).</div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" name="email" id="regEmail" placeholder="Email" required>
+                <label for="regEmail">Email address</label>
+                <div class="invalid-feedback">Please enter a valid email.</div>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="password" class="form-control" name="password" id="regPassword" placeholder="Password" required minlength="6">
+                <label for="regPassword">Password</label>
+                <div class="invalid-feedback">Password must be at least 6 characters.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">Create Account</button>
+        </form>
+        <p class="mt-4 text-center text-muted">Already have an account? <a href="{{ url_for('auth.login') }}" class="text-primary">Login</a></p>
+    </div>
+</div>
+
+<script>
+document.getElementById('registerFormAction').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
+        e.stopPropagation();
+        e.target.classList.add('was-validated');
+        return;
+    }
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    const res = await fetch('{{ url_for("auth.register") }}', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) window.location.href = '{{ url_for("auth.login") }}';
+    else alert(result.message);
+});
+</script>
+{% endblock %}

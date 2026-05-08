@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid animate-fade">
+    <header class="mb-5">
+        <h2 class="fw-bold mb-0">Analytics</h2>
+        <p class="text-muted">In-depth insights into your productivity trends.</p>
+    </header>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="dashboard-card h-100">
+                <h5 class="fw-bold mb-4">Status Distribution</h5>
+                <canvas id="statusChart" height="300"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="dashboard-card h-100">
+                <h5 class="fw-bold mb-4">Priority Breakdown</h5>
+                <canvas id="priorityChart" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- Matplotlib Trend Chart -->
+        <div class="col-12">
+            <div class="dashboard-card">
+                <h5 class="fw-bold mb-4">Task Creation Trend (Powered by Matplotlib)</h5>
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename=trend_image) }}" class="img-fluid rounded shadow" alt="Trend Chart" onerror="this.src='https://via.placeholder.com/800x300?text=No+Data+for+Trend+Yet'">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadAnalyticsCharts() {
+    const res = await fetch('/api/tasks');
+    const tasks = await res.json();
+
+    const statusCounts = { 'Completed': 0, 'Pending': 0 };
+    const priorityCounts = { 'High': 0, 'Medium': 0, 'Low': 0 };
+
+    tasks.forEach(t => {
+        statusCounts[t.status]++;
+        priorityCounts[t.priority]++;
+    });
+
+    // Status Chart
+    new Chart(document.getElementById('statusChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(statusCounts),
+            datasets: [{
+                data: Object.values(statusCounts),
+                backgroundColor: ['#007bff', '#6c757d'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { position: 'bottom', labels: { color: '#b0b0b0' } } }
+        }
+    });
+
+    // Priority Chart
+    new Chart(document.getElementById('priorityChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(priorityCounts),
+            datasets: [{
+                label: 'Tasks',
+                data: Object.values(priorityCounts),
+                backgroundColor: '#007bff',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#b0b0b0' } },
+                x: { grid: { display: false }, ticks: { color: '#b0b0b0' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', loadAnalyticsCharts);
+</script>
+{% endblock %}

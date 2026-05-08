@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="dashboard-card p-5 shadow-lg animate-fade" style="width: 100%; max-width: 450px;">
+        <h2 class="fw-bold mb-4 text-center">Login</h2>
+        <form id="loginFormAction" class="needs-validation" novalidate>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="username" id="loginUsername" placeholder="Username" required>
+                <label for="loginUsername">Username</label>
+                <div class="invalid-feedback">Username is required.</div>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="password" class="form-control" name="password" id="loginPassword" placeholder="Password" required>
+                <label for="loginPassword">Password</label>
+                <div class="invalid-feedback">Password is required.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">Sign In</button>
+        </form>
+        <p class="mt-4 text-center text-muted">New here? <a href="{{ url_for('auth.register') }}" class="text-primary">Create an account</a></p>
+    </div>
+</div>
+
+<script>
+document.getElementById('loginFormAction').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
+        e.stopPropagation();
+        e.target.classList.add('was-validated');
+        return;
+    }
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    const res = await fetch('{{ url_for("auth.login") }}', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.success) window.location.href = '{{ url_for("tasks.dashboard") }}';
+    else alert(result.message);
+});
+</script>
+{% endblock %}

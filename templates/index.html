@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row min-vh-100 align-items-center">
+        <div class="col-12 animate-up">
+            <h1 class="display-2 fw-bold mb-4">Manage Tasks <span class="text-gradient">Smarter.</span></h1>
+            <p class="lead mb-5" style="color: var(--muted);">The most advanced full-stack task management solution with real-time analytics and WebSocket updates.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5 py-3 shadow">Get Started</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg px-5 py-3">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
